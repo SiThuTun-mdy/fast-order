@@ -12,6 +12,12 @@
       "sourceType": "github",
       "skillPath": "skills/clean-code-principles/SKILL.md",
       "computedHash": "6d3a1fa5372f6237123d4248b4e64acbc53397b53becae4bc011513baa4b4597"
+    },
+    "testing-best-practices": {
+      "source": "asyrafhussin/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/testing-best-practices/SKILL.md",
+      "computedHash": "db03e7c0afa7502a2d9481c5e163f93ebf7f3904049521c00342aa66d9b19a04"
     }
   }
 }
