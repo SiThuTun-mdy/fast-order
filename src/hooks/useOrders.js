@@ -24,12 +24,12 @@ export function useOrder(orderId) {
     fetchOrder();
   }, [fetchOrder]);
 
-  // Poll every 5 s until order is ready
+  // Poll every 5 s until order is ready, or stop if the order can't be found
   useEffect(() => {
-    if (!orderId || order?.status === 'ready') return;
+    if (!orderId || order?.status === 'ready' || error) return;
     const interval = setInterval(fetchOrder, 5000);
     return () => clearInterval(interval);
-  }, [orderId, order?.status, fetchOrder]);
+  }, [orderId, order?.status, error, fetchOrder]);
 
   return { order, loading, error, refetch: fetchOrder };
 }

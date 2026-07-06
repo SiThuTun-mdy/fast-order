@@ -98,12 +98,7 @@ describe('useOrder', () => {
     expect(getOrder).toHaveBeenCalledTimes(1);
   });
 
-  // Known bug (documented, not fixed here): the polling effect only stops when
-  // `order?.status === 'ready'`. On a persistent fetch error, `order` is never
-  // set, so `order?.status` stays `undefined` forever and the hook keeps
-  // retrying on every interval tick indefinitely — even for a permanent
-  // "not found" error that will never resolve differently.
-  it('keeps polling indefinitely on a persistent fetch error (current buggy behavior)', async () => {
+  it('stops polling once the fetch errors, instead of retrying forever', async () => {
     getOrder.mockRejectedValue(new Error('Order not found'));
 
     renderHook(() => useOrder(FAKE_ORDER_ID));
@@ -112,8 +107,7 @@ describe('useOrder', () => {
 
     await act(() => vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS * 3));
 
-    // Demonstrates the bug: still retrying after 3 more intervals with no
-    // backoff and no stop condition, despite every attempt failing the same way.
-    expect(getOrder).toHaveBeenCalledTimes(4);
+    // The error stop-condition means no further retries happen.
+    expect(getOrder).toHaveBeenCalledTimes(1);
   });
 });
