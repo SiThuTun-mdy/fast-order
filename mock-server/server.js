@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { readFileSync, writeFileSync } from 'fs';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -98,6 +98,13 @@ app.get('/api/orders', (_req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () =>
-  console.log(`Mock API server running → http://localhost:${PORT}`)
-);
+
+// Only bind a real port when this file is run directly (`node mock-server/server.js`).
+// When imported (e.g. by supertest in tests), just export `app` — no network bind.
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+  app.listen(PORT, () =>
+    console.log(`Mock API server running → http://localhost:${PORT}`)
+  );
+}
+
+export default app;
