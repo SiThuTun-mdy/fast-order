@@ -20,7 +20,8 @@
       "Bash(npm run *)",
       "Bash(git add *)",
       "Bash(git status *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(npx -y supabase migration new seed_rbac_sysadmin)"
     ]
   },
   "enabledMcpjsonServers": [

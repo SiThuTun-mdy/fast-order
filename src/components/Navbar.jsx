@@ -1,8 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCartCount } from "../context/CartContext";
+import { useAuth, useAuthDispatch, useHasRole } from "../context/AuthContext";
 
 export default function Navbar() {
   const count = useCartCount();
+  const { user } = useAuth();
+  const dispatch = useAuthDispatch();
+  const isSysAdmin = useHasRole("SysAdmin");
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_user");
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  };
 
   return (
     <nav className="sticky top-0 z-40 bg-white shadow-sm">
@@ -28,6 +40,31 @@ export default function Navbar() {
           >
             Kitchen
           </Link>
+
+          {isSysAdmin && (
+            <Link
+              to="/sysadmin"
+              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            >
+              Admin
+            </Link>
+          )}
+
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            >
+              Login
+            </Link>
+          )}
 
           <Link
             to="/cart"

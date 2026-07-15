@@ -28,6 +28,22 @@ export function mapOrderItem(row) {
   };
 }
 
+export function mapRestaurant(row) {
+  return { id: row.id, name: row.name, address: row.address, phone: row.phone, createdAt: row.created_at };
+}
+
+// Never includes `password` — this is the only place app_user rows are
+// turned into API responses, so any future column added to app_user must be
+// explicitly opted in here, not spread in.
+export function mapAppUser(row) {
+  return {
+    id: row.id,
+    username: row.username,
+    restaurantId: row.restaurant_id,
+    roles: (row.user_role ?? []).map((ur) => ur.role.role_name),
+  };
+}
+
 export function mapOrder(row) {
   return {
     id: row.id,
