@@ -1,0 +1,17 @@
+curl -i -X POST "https://dciowbksowpomyjntywz.supabase.co/rest/v1/rpc/create_order" \
+  -H "apikey: sb_publishable_xuXmT2bZz_xZQsKTbI1lLg_QnHnOkjI" \
+  -H "Authorization: Bearer sb_publishable_xuXmT2bZz_xZQsKTbI1lLg_QnHnOkjI" \
+  -H "Content-Type: application/json" \
+  -H "Prefer: return=representation" \
+  --data-raw '{
+    "p_customer_name":"Jane Smith",
+    "p_phone":"555-0100",
+    "p_order_type":"dine-in",
+    "p_table_number":"7",
+    "p_notes":"No onions",
+    "p_items":[{"menu_id":1,"name":"Coffee","emoji":"☕","price":3.50,"quantity":2}],
+    "p_subtotal":7.00,
+    "p_tax":0.70,
+    "p_total":7.70 }'
+
+

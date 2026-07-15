@@ -1,7 +1,34 @@
 {
   "permissions": {
     "allow": [
-      "mcp__context7__resolve-library-id"
+      "mcp__context7__resolve-library-id",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_navigate",
+      "Bash(npx next *)",
+      "mcp__playwright__browser_find",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_type",
+      "Bash(curl -s -i -X PATCH http://localhost:3000/api/orders/ORD-1783850433778/status -H 'Content-Type: application/json' -d '{\"status\":\"confirmed\"}')",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(pkill -f \"vite$\")",
+      "Bash(supabase --version)",
+      "Bash(supabase migration *)",
+      "Bash(npx -y supabase migration new add_restaurant_entity)",
+      "Bash(npx -y supabase db push)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/api/menu)",
+      "Bash(curl -s http://localhost:3000/api/menu)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git status *)",
+      "Bash(git commit *)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "playwright",
+    "supabase"
+  ],
+  "disabledMcpjsonServers": [
+    "context7",
+    "filesystem"
+  ]
 }

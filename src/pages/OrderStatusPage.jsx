@@ -5,9 +5,9 @@ import OrderStatusBadge from '../components/OrderStatusBadge';
 const STEPS = [
   {
     key: 'confirmed',
-    label: 'Order Confirmed',
-    icon: '✅',
-    desc: 'We received your order',
+    label: 'Pay at Counter',
+    icon: '🧾',
+    desc: 'Please pay at the cashier counter',
   },
   {
     key: 'kitchen',
@@ -56,10 +56,18 @@ export default function OrderStatusPage() {
       {/* Header */}
       <div className="text-center mb-8">
         <div className="text-5xl mb-3">
-          {order.status === 'ready' ? '🎉' : order.status === 'kitchen' ? '👨‍🍳' : '✅'}
+          {order.status === 'ready'
+            ? '🎉'
+            : order.status === 'kitchen'
+            ? '👨‍🍳'
+            : '🧾'}
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-1">
-          {order.status === 'ready' ? "Your order is ready!" : "Hang tight!"}
+          {order.status === 'ready'
+            ? 'Your order is ready!'
+            : order.status === 'confirmed'
+            ? 'Please pay at the counter'
+            : 'Hang tight!'}
         </h1>
         <p className="text-gray-500 text-sm">Order #{order.id}</p>
         <div className="mt-3">

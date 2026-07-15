@@ -13,8 +13,8 @@ async function flushMicrotasks() {
   });
 }
 
-// Mock at the API-layer boundary (src/api/orders.js), not the underlying axios
-// client — this is the seam the hook actually depends on.
+// Mock at the API-layer boundary (src/api/orders.js), not the underlying
+// Supabase client — this is the seam the hook actually depends on.
 vi.mock('../../api/orders', () => ({
   getOrder: vi.fn(),
 }));

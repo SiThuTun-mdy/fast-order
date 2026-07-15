@@ -1,59 +1,36 @@
-import client from './client';
-import { menuItems, categories } from '../data/mockMenu';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+async function request(path, options) {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    headers: { 'Content-Type': 'application/json' },
+    ...options,
+  });
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.message ?? 'Request failed');
+  return body;
+}
 
 export async function getMenuItems(category) {
-  try {
-    const params = category && category !== 'all' ? { category } : {};
-    return await client.get('/menu', { params });
-  } catch {
-    if (category && category !== 'all') {
-      return menuItems.filter((item) => item.category === category);
-    }
-    return menuItems;
-  }
+  const query = category && category !== 'all' ? `?category=${encodeURIComponent(category)}` : '';
+  return request(`/menu${query}`);
 }
 
 export async function getCategories() {
-  try {
-    return await client.get('/categories');
-  } catch {
-    return categories;
-  }
+  return request('/categories');
 }
 
 export async function createOrder(orderData) {
-  try {
-    return await client.post('/orders', orderData);
-  } catch {
-    // Offline fallback: build a local order and simulate status via timestamps
-    const mockOrder = {
-      id: `ORD-${Date.now()}`,
-      ...orderData,
-      status: 'confirmed',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    sessionStorage.setItem(`order-${mockOrder.id}`, JSON.stringify(mockOrder));
-    return mockOrder;
-  }
-}
-
-function simulatedStatus(createdAt) {
-  const elapsed = Date.now() - new Date(createdAt).getTime();
-  if (elapsed > 45000) return 'ready';
-  if (elapsed > 15000) return 'kitchen';
-  return 'confirmed';
+  return request('/orders', { method: 'POST', body: JSON.stringify(orderData) });
 }
 
 export async function getOrder(id) {
-  try {
-    return await client.get(`/orders/${id}`);
-  } catch {
-    const stored = sessionStorage.getItem(`order-${id}`);
-    if (stored) {
-      const order = JSON.parse(stored);
-      return { ...order, status: simulatedStatus(order.createdAt) };
-    }
-    throw new Error('Order not found');
-  }
+  return request(`/orders/${id}`);
+}
+
+export async function getOrders() {
+  return request('/orders');
+}
+
+export async function updateOrderStatus(id, status) {
+  return request(`/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) });
 }

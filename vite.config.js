@@ -5,17 +5,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     allowedHosts: ['quickbite.local'],
-    proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-      },
-    },
   },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.js'],
     globals: false,
     css: false,
+    // server/ is an independent Next.js app with its own vitest config and
+    // node_modules — exclude it here so the two test suites stay separate.
+    exclude: ['**/node_modules/**', 'server/**'],
   },
 });
