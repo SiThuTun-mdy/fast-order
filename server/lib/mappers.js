@@ -15,7 +15,7 @@ export function mapMenuItem(row) {
 }
 
 export function mapCategory(row) {
-  return { id: row.id, name: row.name, icon: row.icon };
+  return { id: row.id, name: row.name, icon: row.icon, sortOrder: row.sort_order };
 }
 
 export function mapOrderItem(row) {

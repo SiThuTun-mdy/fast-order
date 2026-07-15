@@ -7,13 +7,14 @@ export default function Navbar() {
   const { user } = useAuth();
   const dispatch = useAuthDispatch();
   const isSysAdmin = useHasRole("SysAdmin");
+  const isAdmin = useHasRole("Admin");
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
     localStorage.removeItem("auth_user");
     dispatch({ type: "LOGOUT" });
-    navigate("/");
+    navigate("/login");
   };
 
   return (
@@ -44,6 +45,15 @@ export default function Navbar() {
           {isSysAdmin && (
             <Link
               to="/sysadmin"
+              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            >
+              SysAdmin
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link
+              to="/admin"
               className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
             >
               Admin

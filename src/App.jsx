@@ -11,6 +11,10 @@ import LoginPage from './pages/LoginPage';
 import SysAdminPage from './pages/SysAdminPage';
 import TenantPage from './pages/TenantPage';
 import UserPage from './pages/UserPage';
+import AdminPage from './pages/AdminPage';
+import AdminUserPage from './pages/AdminUserPage';
+import AdminMenuPage from './pages/AdminMenuPage';
+import AdminCategoryPage from './pages/AdminCategoryPage';
 
 export default function App() {
   const location = useLocation();
@@ -49,6 +53,38 @@ export default function App() {
             element={
               <ProtectedRoute requireRole="SysAdmin">
                 <UserPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute requireRole="Admin">
+                <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/:tenantId/user"
+            element={
+              <ProtectedRoute requireRole="Admin" requireTenantMatch>
+                <AdminUserPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/:tenantId/menu"
+            element={
+              <ProtectedRoute requireRole="Admin" requireTenantMatch>
+                <AdminMenuPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/:tenantId/category"
+            element={
+              <ProtectedRoute requireRole="Admin" requireTenantMatch>
+                <AdminCategoryPage />
               </ProtectedRoute>
             }
           />

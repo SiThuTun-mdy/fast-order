@@ -24,7 +24,13 @@ export default function LoginPage() {
       localStorage.setItem('auth_token', token);
       localStorage.setItem('auth_user', JSON.stringify(user));
       dispatch({ type: 'LOGIN_SUCCESS', token, user });
-      navigate('/sysadmin');
+      if (user?.roles?.includes('SysAdmin')) {
+        navigate('/sysadmin');
+      } else if (user?.roles?.includes('Admin')) {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       dispatch({ type: 'LOGIN_ERROR', error: err.message });
       setError(err.message);

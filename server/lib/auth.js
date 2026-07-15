@@ -29,3 +29,12 @@ export function requireRole(payload, roleName) {
 export function requirePermission(payload, permissionName) {
   if (!payload.permissions?.includes(permissionName)) throw new AuthError('Forbidden', 403);
 }
+
+// SysAdmin manages every tenant; any other role may only touch its own
+// restaurant's data. Callers must pass the restaurantId being acted on —
+// from a query param, a request body, or (for mutations by row id) a
+// preliminary fetch of the target row's restaurant_id.
+export function assertTenantAccess(payload, restaurantId) {
+  if (payload.roles?.includes('SysAdmin')) return;
+  if (payload.restaurantId !== restaurantId) throw new AuthError('Forbidden', 403);
+}

@@ -13,11 +13,15 @@ vi.mock('jsonwebtoken', () => ({
 
 import jwt from 'jsonwebtoken';
 import supabaseAdmin from '../lib/supabaseAdmin';
-import { verifyAuth, requireRole, requirePermission, AuthError } from '../lib/auth';
+import { verifyAuth, requireRole, requirePermission, assertTenantAccess, AuthError } from '../lib/auth';
 import { POST as login } from '../app/api/auth/login/route';
 import { GET as getTenants, POST as postTenant } from '../app/api/tenants/route';
 import { DELETE as deleteTenant } from '../app/api/tenants/[id]/route';
 import { GET as getUsers, POST as postUser } from '../app/api/users/route';
+import { PATCH as patchUser } from '../app/api/users/[id]/route';
+import { POST as postMenuItem } from '../app/api/menu/route';
+import { POST as postCategory } from '../app/api/categories/route';
+import { DELETE as deleteCategory } from '../app/api/categories/[id]/route';
 
 function makeBuilder(result) {
   const builder = {
@@ -40,6 +44,14 @@ const sysadminPayload = {
   restaurantId: 'restaurant-1',
   roles: ['SysAdmin'],
   permissions: ['order.manage', 'order.update', 'user.manage', 'tenant.manage'],
+};
+
+const adminAPayload = {
+  sub: 'admin-a',
+  username: 'admin-a',
+  restaurantId: 'restaurant-A',
+  roles: ['Admin'],
+  permissions: ['user.manage', 'menu.manage', 'category.manage'],
 };
 
 beforeEach(() => {
@@ -253,5 +265,176 @@ describe('POST /api/users', () => {
     });
     expect(body).toEqual({ id: 'u2', username: 'newuser', restaurantId: 'r1', roles: ['Cashier'] });
     expect(JSON.stringify(body)).not.toContain('password');
+  });
+});
+
+describe('assertTenantAccess', () => {
+  it('allows a SysAdmin regardless of restaurantId mismatch', () => {
+    expect(() => assertTenantAccess(sysadminPayload, 'some-other-restaurant')).not.toThrow();
+  });
+
+  it('allows a matching restaurantId', () => {
+    expect(() => assertTenantAccess(adminAPayload, 'restaurant-A')).not.toThrow();
+  });
+
+  it('throws a 403 AuthError on a mismatched restaurantId', () => {
+    expect(() => assertTenantAccess(adminAPayload, 'restaurant-B')).toThrow(AuthError);
+    try {
+      assertTenantAccess(adminAPayload, 'restaurant-B');
+    } catch (err) {
+      expect(err.status).toBe(403);
+    }
+  });
+});
+
+describe('cross-tenant isolation (BOLA)', () => {
+  it('POST /api/users rejects an Admin targeting a different tenant before touching the database', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+
+    const res = await postUser(
+      authedRequest('http://localhost/api/users', {
+        method: 'POST',
+        body: JSON.stringify({ username: 'intruder', password: 'pw', restaurantId: 'restaurant-B', roleNames: ['Cashier'] }),
+      })
+    );
+
+    expect(res.status).toBe(403);
+    expect(supabaseAdmin.rpc).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/users rejects an Admin scoping the query to a different tenant', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+
+    const res = await getUsers(authedRequest('http://localhost/api/users?restaurantId=restaurant-B'));
+
+    expect(res.status).toBe(403);
+    expect(supabaseAdmin.from).not.toHaveBeenCalled();
+  });
+
+  it('GET /api/users rejects an Admin omitting restaurantId (would list every tenant)', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+
+    const res = await getUsers(authedRequest('http://localhost/api/users'));
+
+    expect(res.status).toBe(403);
+    expect(supabaseAdmin.from).not.toHaveBeenCalled();
+  });
+
+  it('PATCH /api/users/[id] rejects an Admin targeting a user owned by a different tenant', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+    supabaseAdmin.from.mockReturnValue(makeBuilder({ data: { restaurant_id: 'restaurant-B' }, error: null }));
+
+    const res = await patchUser(
+      authedRequest('http://localhost/api/users/u1', { method: 'PATCH', body: JSON.stringify({ username: 'renamed' }) }),
+      { params: Promise.resolve({ id: 'u1' }) }
+    );
+
+    expect(res.status).toBe(403);
+  });
+
+  it('POST /api/menu rejects an Admin targeting a different tenant before touching the database', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+
+    const res = await postMenuItem(
+      authedRequest('http://localhost/api/menu', {
+        method: 'POST',
+        body: JSON.stringify({ name: 'Sneaky Burger', category: 'burgers', restaurantId: 'restaurant-B', price: 5 }),
+      })
+    );
+
+    expect(res.status).toBe(403);
+    expect(supabaseAdmin.from).not.toHaveBeenCalled();
+  });
+
+  it('POST /api/categories rejects an Admin targeting a different tenant before touching the database', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+
+    const res = await postCategory(
+      authedRequest('http://localhost/api/categories', {
+        method: 'POST',
+        body: JSON.stringify({ id: 'sneaky', name: 'Sneaky', icon: '🕵️', restaurantId: 'restaurant-B' }),
+      })
+    );
+
+    expect(res.status).toBe(403);
+    expect(supabaseAdmin.from).not.toHaveBeenCalled();
+  });
+
+  it('same-tenant calls succeed', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+    supabaseAdmin.rpc.mockReturnValue(
+      makeBuilder({ data: { id: 'u3', username: 'staff', password: 'hash', restaurant_id: 'restaurant-A' }, error: null })
+    );
+
+    const res = await postUser(
+      authedRequest('http://localhost/api/users', {
+        method: 'POST',
+        body: JSON.stringify({ username: 'staff', password: 'pw', restaurantId: 'restaurant-A', roleNames: ['Cashier'] }),
+      })
+    );
+
+    expect(res.status).toBe(201);
+  });
+
+  it('POST /api/menu succeeds for a same-tenant Admin', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+    supabaseAdmin.from.mockReturnValue(
+      makeBuilder({
+        data: { id: 99, name: 'Loaded Nachos', category_id: 'sides', unit_price: '6.99', description: '', emoji: '🧀', popular: false },
+        error: null,
+      })
+    );
+
+    const res = await postMenuItem(
+      authedRequest('http://localhost/api/menu', {
+        method: 'POST',
+        body: JSON.stringify({ name: 'Loaded Nachos', category: 'sides', restaurantId: 'restaurant-A', price: 6.99 }),
+      })
+    );
+    const body = await res.json();
+
+    expect(res.status).toBe(201);
+    expect(body).toEqual({ id: 99, name: 'Loaded Nachos', category: 'sides', price: 6.99, description: '', emoji: '🧀', popular: false });
+  });
+
+  it('POST /api/categories succeeds for a same-tenant Admin', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+    supabaseAdmin.from.mockReturnValue(
+      makeBuilder({ data: { id: 'snacks', name: 'Snacks', icon: '🥨', sort_order: 6 }, error: null })
+    );
+
+    const res = await postCategory(
+      authedRequest('http://localhost/api/categories', {
+        method: 'POST',
+        body: JSON.stringify({ id: 'snacks', name: 'Snacks', icon: '🥨', restaurantId: 'restaurant-A', sortOrder: 6 }),
+      })
+    );
+    const body = await res.json();
+
+    expect(res.status).toBe(201);
+    expect(body).toEqual({ id: 'snacks', name: 'Snacks', icon: '🥨', sortOrder: 6 });
+  });
+});
+
+describe('DELETE /api/categories/[id] FK violation handling', () => {
+  it('translates a 23503 foreign-key violation into a friendly 409', async () => {
+    jwt.verify.mockReturnValue(adminAPayload);
+    supabaseAdmin.from.mockImplementation((table) => {
+      if (table === 'category') {
+        return {
+          ...makeBuilder({ data: { restaurant_id: 'restaurant-A' }, error: null }),
+          delete: vi.fn(() => makeBuilder({ data: null, error: { code: '23503', message: 'foreign key violation' } })),
+        };
+      }
+      return makeBuilder({ data: null, error: null });
+    });
+
+    const res = await deleteCategory(authedRequest('http://localhost/api/categories/pizza', { method: 'DELETE' }), {
+      params: Promise.resolve({ id: 'pizza' }),
+    });
+    const body = await res.json();
+
+    expect(res.status).toBe(409);
+    expect(body.message).toMatch(/still has menu items/);
   });
 });

@@ -1,20 +1,26 @@
 import supabaseAdmin from '../../../lib/supabaseAdmin';
 import { mapAppUser } from '../../../lib/mappers';
-import { verifyAuth, requirePermission, AuthError } from '../../../lib/auth';
+import { verifyAuth, requirePermission, requireRole, assertTenantAccess, AuthError } from '../../../lib/auth';
 
 // Explicit column list (never `select('*')`) so `password` can never leak
 // here even if `mapAppUser` were ever changed carelessly — defense in depth.
 const APP_USER_COLUMNS = 'id, username, restaurant_id, user_role(role(role_name))';
 
 export async function GET(request) {
+  const restaurantId = new URL(request.url).searchParams.get('restaurantId');
+
   try {
-    requirePermission(verifyAuth(request), 'user.manage');
+    const payload = verifyAuth(request);
+    requirePermission(payload, 'user.manage');
+    // Omitting restaurantId means "list every tenant's users" — only
+    // SysAdmin may do that; a tenant Admin must always scope the call.
+    if (restaurantId) assertTenantAccess(payload, restaurantId);
+    else requireRole(payload, 'SysAdmin');
   } catch (err) {
     if (err instanceof AuthError) return Response.json({ message: err.message }, { status: err.status });
     throw err;
   }
 
-  const restaurantId = new URL(request.url).searchParams.get('restaurantId');
   let query = supabaseAdmin.from('app_user').select(APP_USER_COLUMNS).order('username');
   if (restaurantId) query = query.eq('restaurant_id', restaurantId);
 
@@ -27,14 +33,16 @@ export async function GET(request) {
 // that hashes the password and assigns every role in one go, instead of two
 // separate client-driven inserts that could leave an orphan user on failure.
 export async function POST(request) {
+  const { username, password, restaurantId, roleNames } = await request.json();
+
   try {
-    requirePermission(verifyAuth(request), 'user.manage');
+    const payload = verifyAuth(request);
+    requirePermission(payload, 'user.manage');
+    assertTenantAccess(payload, restaurantId);
   } catch (err) {
     if (err instanceof AuthError) return Response.json({ message: err.message }, { status: err.status });
     throw err;
   }
-
-  const { username, password, restaurantId, roleNames } = await request.json();
 
   const { data, error } = await supabaseAdmin
     .rpc('create_app_user', {

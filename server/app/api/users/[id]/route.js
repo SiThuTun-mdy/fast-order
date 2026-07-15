@@ -1,18 +1,27 @@
 import supabaseAdmin from '../../../../lib/supabaseAdmin';
 import { mapAppUser } from '../../../../lib/mappers';
-import { verifyAuth, requirePermission, AuthError } from '../../../../lib/auth';
+import { verifyAuth, requirePermission, assertTenantAccess, AuthError } from '../../../../lib/auth';
 
 const APP_USER_COLUMNS = 'id, username, restaurant_id, user_role(role(role_name))';
 
+async function loadOwningRestaurant(id) {
+  return supabaseAdmin.from('app_user').select('restaurant_id').eq('id', id).single();
+}
+
 export async function PATCH(request, { params }) {
+  const { id } = await params;
+
   try {
-    requirePermission(verifyAuth(request), 'user.manage');
+    const payload = verifyAuth(request);
+    requirePermission(payload, 'user.manage');
+    const { data: existing, error: lookupError } = await loadOwningRestaurant(id);
+    if (lookupError) return Response.json({ message: 'User not found' }, { status: 404 });
+    assertTenantAccess(payload, existing.restaurant_id);
   } catch (err) {
     if (err instanceof AuthError) return Response.json({ message: err.message }, { status: err.status });
     throw err;
   }
 
-  const { id } = await params;
   const { username, password, roleNames } = await request.json();
 
   if (username !== undefined) {
@@ -57,14 +66,19 @@ export async function PATCH(request, { params }) {
 
 // Deleting a user cascades to its `user_role` rows via `on delete cascade`.
 export async function DELETE(request, { params }) {
+  const { id } = await params;
+
   try {
-    requirePermission(verifyAuth(request), 'user.manage');
+    const payload = verifyAuth(request);
+    requirePermission(payload, 'user.manage');
+    const { data: existing, error: lookupError } = await loadOwningRestaurant(id);
+    if (lookupError) return Response.json({ message: 'User not found' }, { status: 404 });
+    assertTenantAccess(payload, existing.restaurant_id);
   } catch (err) {
     if (err instanceof AuthError) return Response.json({ message: err.message }, { status: err.status });
     throw err;
   }
 
-  const { id } = await params;
   const { error } = await supabaseAdmin.from('app_user').delete().eq('id', id);
   if (error) return Response.json({ message: error.message }, { status: 500 });
   return Response.json({ message: 'Deleted' });
