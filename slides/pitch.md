@@ -7,30 +7,28 @@ auto-advance: 20
 ---
 
 # Fast Order
-### One Developer. Five AI Agents. Demo Purpose.
+### One Developer. Three AI Agents. Production-Shaped Demo.
 
-**Stack:** Express · React ·  Playwright
+**Stack:** React 18 · Next.js (Route Handlers) · Supabase Postgres · Vitest
 **Built:** VibeCode Tour · Jul 2026
 
 ---
 
 ## The Problem & The Pipeline
 
-Small food stall and food house can easily use to accept order.
-Easy to order and check order status on real time.
+Small food stalls and food houses need a fast way to take orders and let
+customers track status in real time — without a POS system or spreadsheet chaos.
 
-| BEFORE: Fragmented | AFTER: SpecFlow Lite |
+| BEFORE: Fragmented | AFTER: Fast Order |
 |---|---|
-| ✏️ Google Docs (Requirements) | 📋 Requirements |
-| 📝 Notion (Specs) | ↕️ |
-| 🎫 Jira (Tasks) | 📐 Specifications ← GitHub Spec Kit |
-| ❌ No traceability | ↕️ |
-| ❌ Context switching | ✅ Tasks |
-| ❌ Setup overhead | **All linked. All traceable.** |
+| 📝 Paper tickets / verbal orders | 📋 Menu → Cart → Checkout |
+| ❌ No order status visibility | 🔔 Real-time status polling |
+| ❌ One role does everything | 🧑‍🍳 Cashier · Kitchen · Admin · SysAdmin |
+| ❌ No access control | 🔒 RBAC: roles, permissions, tenants |
 
-**Pipeline:** `ANALYZE → CLARIFY → SPECIFY → PLAN → TASKS → IMPLEMENT → REVIEW`
+**Flow:** `MENU → CART → CHECKOUT → CONFIRM (Cashier) → PREPARE (Kitchen) → SERVED`
 
-📊 7 features · 42 spec docs · 100 tests
+📊 13 route pages · 13 DB tables · 100 tests
 
 ---
 
@@ -38,71 +36,64 @@ Easy to order and check order status on real time.
 
 | Agent | Tools | Deliverables |
 |---|---|---|
-| 🧠 BA | Seq Thinking | User stories, ACs, edge cases |
-| 🏗️ Architect | Seq Thinking, Context7, Supabase | DB schema, API routes, data flow |
-| 💻 Developer | Context7, GitHub, Playwright | 41 components, 100 tests, 10 APIs |
-| 🧪 QA | Playwright | E2E tests, console checks, responsive validation |
-| 👀 Reviewer | GitHub | Code quality, risk assessment, PR gate |
-| 🔒 Security | Context7, Supabase | RLS audit, auth review, OWASP scan |
+| 💻 Developer (Claude Code) | Context7, Supabase MCP, Playwright MCP | 32 components/pages, 13 API routes, 100 tests |
+| 🎨 design-system | Read/Grep/Glob, Bash | shadcn/base-ui consistency, semantic Tailwind tokens |
+| 🔎 code-reviewer | Read/Grep/Glob, Bash | Correctness bugs, React anti-patterns, complexity review |
+| 🧪 testing-best-practices | Read/Grep/Glob/Write, Playwright MCP | Coverage of Cart, Auth, Orders, API client |
 
-> **Rule:** No implementation without approved spec. Dev escalates → Reviewer + Security.
+> **Rule:** UI changes get a design-system pass; code changes get a reviewer pass before commit.
 
 ---
 
-## 18 Skills — Composable & Versioned
+## Skills — Composable & Versioned
 
 | Phase | Skill | Output |
 |---|---|---|
-| **Analysis** | `ba-skill`, `speckit-analyze`, `speckit-clarify` | User stories, ACs, ambiguity resolved |
-| **Design** | `architect`, `ux-skill`, `speckit-plan` | DB schema, API design, impl plan |
-| **Build** | `speckit-implement`, `speckit-tasks` | Components, task deps, estimates |
-| **Test/Review** | `qa-skill`, `reviewer`, `security-review` | E2E tests, code review, RLS audit |
-| **Knowledge** | `swarmvault`, `speckit-constitution` | Code graph, wiki, conventions |
+| **Backend** | `supabase-server`, `supabase-postgres-best-practices` | RLS-safe route handlers, migrations, query design |
+| **Frontend** | `react-vite-best-practices`, `shadcn` | Component patterns, primitive composition |
+| **Domain** | `user-order-flow` | Order lifecycle gotchas (menu → cart → checkout → status) |
+| **Quality** | `testing-best-practices`, `clean-code-principles` | 100-test suite, readable, minimal diffs |
+| **Docs** | `context7-mcp` | Up-to-date Next.js/Supabase/Tailwind APIs, no hallucinated signatures |
 
 ```
-Skills aren't prompts — they're engineering knowledge you compose, version, and reuse.
-The same skill produces the same quality bar across 7 feature cycles.
-Different agents, different features, consistent output.
+The frontend never talks to Supabase directly — every DB call routes through the
+Next.js API in server/, which owns authorization: orders are only ever created as
+`confirmed`, customer records are never read back to the client.
 ```
 
 ---
 
-## 8 MCP Tools — Augmented Context
+## MCP Servers — Augmented Context
 
-| Tool | Function |
+| Server | Function |
 |---|---|
-| 📚 **Context7** | Live docs for Next.js, Supabase, Zod |
-| 🔧 **GitHub** | Issues, PRs, Copilot review |
-| 🧪 **Playwright** | Browser automation, 100 E2E tests |
-| 🎨 **Magic UI** | Component inspiration, dashboards |
-| 🧠 **Seq Thinking** | Structured reasoning, architecture |
-| 🗺️ **SwarmVault** | Code graph, wiki, blast radius |
-| 💾 **Claude Mem** | Cross-session project memory |
-| 🛢️ **Supabase** | RLS, migrations, query inspection |
+| 📚 **Context7** | Live docs for Next.js, Supabase, Tailwind v4, base-ui |
+| 🛢️ **Supabase** | Migrations, RLS, schema inspection, query debugging |
+| 🧪 **Playwright** | Browser automation for E2E verification |
 
 ```
-Agent calls MCP → MCP provides live context → Agent makes informed decision
-No more hallucinated APIs. No more guessing library signatures.
-~80% fewer broad file searches via graph-first queries.
+Agent calls MCP → MCP returns live, versioned docs → Agent writes correct code
+first try. Tailwind v4 (@theme, no config file) and base-ui's `render=` composition
+pattern are both recent enough that stale training data would have gotten them wrong.
 ```
 
 ---
 
 ## Results & Lessons
 
-| By the Numbers | Top 5 Lessons |
+| By the Numbers | Top Lessons |
 |---|---|
-| 7 Features | 1. **Spec-first is faster** — fewer revisions |
-| 41 Components | 2. **Multi-agent > single** — catches different bugs |
-| 10 API Routes | 3. **Playwright MCP** — regressions caught pre-commit |
-| 100 Tests | 4. **SwarmVault** — ~80% fewer broad file searches |
-| 4 DB Tables | 5. **RLS from day one** — zero authorization bugs |
-| 6 AI Agents / 18 Skills / 8 MCP Tools | |
+| 13 Route Pages | 1. **RBAC from day one** — SysAdmin/Admin/Cashier/Kitchen roles, no bolt-on later |
+| 32 App Components/Pages | 2. **Backend owns the DB** — frontend never touches Supabase directly |
+| 14 shadcn/base-ui Primitives | 3. **Mid-migration is real** — hand-rolled Tailwind → shadcn tracked via design-system agent |
+| 13 API Route Handlers | 4. **Polling needs guardrails** — fixed an infinite-polling bug in order status tracking |
+| 13 DB Tables (incl. RBAC + tenants) | 5. **Migrations over hotfixes** — status transitions (e.g. `canceled`) shipped as SQL migrations |
+| 100 Tests (frontend + backend) | |
 
 | NOW ✅ | NEXT 🔜 | LATER 🔮 |
 |---|---|---|
-| 7 features | Multi-user access | AI-generated specs |
-| Full traceability | Full-text search | Real-time collab |
-| RLS security | Audit logging | Mobile PWA |
+| Menu, Cart, Checkout, Order Status | Multi-tenant onboarding UI | Real-time order push (no polling) |
+| Cashier & Kitchen dashboards | Audit logging on admin actions | Mobile PWA |
+| RBAC (SysAdmin/Admin/Cashier/Kitchen) | Username availability UX polish | Analytics dashboard |
 
-_Built with Claude Code · VibeCode Tour · June 2026 · 100% AI-generated, spec-driven_
+_Built with Claude Code · VibeCode Tour · Jul 2026 · Spec-driven, agent-assisted_
