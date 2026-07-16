@@ -20,7 +20,10 @@ import MyProfilePage from "./pages/MyProfilePage";
 export default function App() {
   const location = useLocation();
   const isLoginRoute = location.pathname === "/login";
-  const isPublicMenuRoute = location.pathname === "/";
+  const noSidebarRoutes = ["/", "/cart", "/checkout"];
+  const hideSidebar =
+    noSidebarRoutes.includes(location.pathname) ||
+    location.pathname.startsWith("/order/");
   const routes = (
     <Routes>
       <Route path="/" element={<MenuPage />} />
@@ -121,5 +124,5 @@ export default function App() {
     );
   }
 
-  return <AppLayout showSidebar={!isPublicMenuRoute}>{routes}</AppLayout>;
+  return <AppLayout showSidebar={!hideSidebar}>{routes}</AppLayout>;
 }
