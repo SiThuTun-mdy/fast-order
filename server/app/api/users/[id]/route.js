@@ -26,7 +26,12 @@ export async function PATCH(request, { params }) {
 
   if (username !== undefined) {
     const { error } = await supabaseAdmin.from('app_user').update({ username }).eq('id', id);
-    if (error) return Response.json({ message: error.message }, { status: 500 });
+    if (error) {
+      if (error.code === '23505') {
+        return Response.json({ message: 'Username already exists' }, { status: 409 });
+      }
+      return Response.json({ message: error.message }, { status: 500 });
+    }
   }
 
   // Empty/omitted password means "leave unchanged" — hashing stays in

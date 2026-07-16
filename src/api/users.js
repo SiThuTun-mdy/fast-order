@@ -5,6 +5,11 @@ export async function getUsers(restaurantId) {
   return request(`/users${query}`);
 }
 
+export async function checkUsernameAvailable(username) {
+  const { available } = await request(`/users/check-username?username=${encodeURIComponent(username)}`);
+  return available;
+}
+
 export async function createUser({ username, password, restaurantId, roleNames }) {
   return request('/users', {
     method: 'POST',

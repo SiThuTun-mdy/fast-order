@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTenants } from '../hooks/useTenants';
-import { getUsers, createUser, updateUser, deleteUser } from '../api/users';
+import { getUsers, createUser, updateUser, deleteUser, checkUsernameAvailable } from '../api/users';
 
 const DEFAULT_ROLES = ['SysAdmin', 'Admin', 'Cashier', 'Chef'];
 
@@ -16,8 +16,10 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
   const [expandedId, setExpandedId] = useState(null);
   const [creating, setCreating] = useState(false);
   const [createForm, setCreateForm] = useState({ username: '', password: '', roles: [] });
+  const [createError, setCreateError] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editDraft, setEditDraft] = useState({ username: '', password: '', roles: [] });
+  const [editError, setEditError] = useState(null);
   const [confirmingDeleteId, setConfirmingDeleteId] = useState(null);
   const [saving, setSaving] = useState(false);
 
@@ -65,8 +67,15 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
   const handleCreate = async (e) => {
     e.preventDefault();
     if (!scopeId) return;
+    setCreateError(null);
     setSaving(true);
     try {
+      const available = await checkUsernameAvailable(createForm.username);
+      if (!available) {
+        setCreateError('User name already exists');
+        return;
+      }
+
       const user = await createUser({
         username: createForm.username,
         password: createForm.password,
@@ -77,6 +86,8 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
       setCreating(false);
       await loadUsers();
       onUserCreated?.(user);
+    } catch (err) {
+      setCreateError(err.message);
     } finally {
       setSaving(false);
     }
@@ -85,9 +96,11 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
   const startEdit = (user) => {
     setEditingId(user.id);
     setEditDraft({ username: user.username, password: '', roles: [...user.roles] });
+    setEditError(null);
   };
 
   const handleSaveEdit = async (id) => {
+    setEditError(null);
     setSaving(true);
     try {
       const patch = { username: editDraft.username, roleNames: editDraft.roles };
@@ -95,6 +108,8 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
       await updateUser(id, patch);
       setEditingId(null);
       await loadUsers();
+    } catch (err) {
+      setEditError(err.message);
     } finally {
       setSaving(false);
     }
@@ -140,7 +155,10 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
 
       <div className="flex items-center justify-end mb-4">
         <button
-          onClick={() => setCreating((c) => !c)}
+          onClick={() => {
+            setCreating((c) => !c);
+            setCreateError(null);
+          }}
           disabled={!scopeId}
           className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
         >
@@ -153,13 +171,19 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
           onSubmit={handleCreate}
           className="bg-white rounded-xl border border-gray-100 p-4 mb-4 space-y-3"
         >
-          <input
-            required
-            placeholder="Username"
-            value={createForm.username}
-            onChange={(e) => setCreateForm((f) => ({ ...f, username: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-          />
+          <div>
+            <input
+              required
+              placeholder="Username"
+              value={createForm.username}
+              onChange={(e) => {
+                setCreateForm((f) => ({ ...f, username: e.target.value }));
+                setCreateError(null);
+              }}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+            />
+            {createError && <p className="text-red-600 text-xs mt-1">{createError}</p>}
+          </div>
           <input
             required
             type="password"
@@ -226,9 +250,13 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
                       <div className="space-y-2">
                         <input
                           value={editDraft.username}
-                          onChange={(e) => setEditDraft((f) => ({ ...f, username: e.target.value }))}
+                          onChange={(e) => {
+                            setEditDraft((f) => ({ ...f, username: e.target.value }));
+                            setEditError(null);
+                          }}
                           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         />
+                        {editError && <p className="text-red-600 text-xs">{editError}</p>}
                         <input
                           type="password"
                           placeholder="New password (leave blank to keep unchanged)"
@@ -246,7 +274,10 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
                             Save
                           </button>
                           <button
-                            onClick={() => setEditingId(null)}
+                            onClick={() => {
+                              setEditingId(null);
+                              setEditError(null);
+                            }}
                             className="text-gray-500 text-xs font-medium px-3 py-1.5"
                           >
                             Cancel

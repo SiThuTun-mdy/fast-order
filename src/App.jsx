@@ -15,6 +15,7 @@ import AdminPage from "./pages/AdminPage";
 import AdminUserPage from "./pages/AdminUserPage";
 import AdminMenuPage from "./pages/AdminMenuPage";
 import AdminCategoryPage from "./pages/AdminCategoryPage";
+import MyProfilePage from "./pages/MyProfilePage";
 
 export default function App() {
   const location = useLocation();
@@ -29,6 +30,14 @@ export default function App() {
       <Route path="/cashier" element={<CashierPage />} />
       <Route path="/kitchen" element={<KitchenPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <MyProfilePage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/sysadmin"
         element={

@@ -9,12 +9,14 @@ import {
   Users,
   NotebookTabsIcon,
   NotebookTextIcon,
+  UserCircle,
 } from "lucide-react";
 import { useCartCount } from "../context/CartContext";
 import { useAuth, useHasRole } from "../context/AuthContext";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -58,6 +60,20 @@ export default function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      render={<NavLink to="/profile" />}
+                      isActive={pathname === "/profile"}
+                      tooltip="My Profile"
+                    >
+                      <UserCircle />
+                      <span>My Profile</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarMenuItem>
               {isSysAdmin &&
                 SYSADMIN_NAV_ITEMS.map(({ to, label, icon: Icon }) => (
                   <SidebarMenuItem key={to}>
@@ -100,6 +116,7 @@ export default function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarRail />
     </Sidebar>
   );

@@ -52,7 +52,15 @@ export async function POST(request) {
       p_role_names: roleNames ?? [],
     })
     .single();
-  if (error) return Response.json({ message: error.message }, { status: 500 });
+  if (error) {
+    // 23505 = unique_violation on app_user.username — surfaced as a 409 with
+    // a message the create-user form can show as-is, instead of leaking the
+    // raw "duplicate key value violates constraint app_user_username_key" text.
+    if (error.code === '23505') {
+      return Response.json({ message: 'Username already exists' }, { status: 409 });
+    }
+    return Response.json({ message: error.message }, { status: 500 });
+  }
 
   // Built from known-good inputs rather than `data` (the RPC's `app_user`
   // return type carries the password hash) — this response never touches it.

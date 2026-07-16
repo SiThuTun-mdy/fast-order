@@ -105,6 +105,13 @@ export default function AppHeader({ showSidebarTrigger = false }) {
               </button>
               {menuOpen && (
                 <div className="absolute right-0 mt-2 w-44 rounded-xl border border-gray-100 bg-white p-1 shadow-lg">
+                  <Link
+                    to="/profile"
+                    onClick={() => setMenuOpen(false)}
+                    className="block w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition-colors"
+                  >
+                    My Profile
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="w-full rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition-colors"
