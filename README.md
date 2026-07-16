@@ -2,7 +2,16 @@
 
 Simple Food Ordering Web App. Menu with Categories, Cart View, Checkout and Order Status Pages.
 
-**Demo**: [FastOrder](https://fast-order-eosin.vercel.app/)
+**Demo**: [FastOrder](https://fast-order-demo.vercel.app/)
+
+**Demo User Account**
+| USERNAME | PASSWORD |
+|----------|----------|
+| admin | Admin |
+| cashier | Cashider |
+| chef | Chef |
+
+
 
 ## Tech Stack
 
