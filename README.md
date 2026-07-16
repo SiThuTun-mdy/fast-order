@@ -56,3 +56,32 @@ The app is available at `http://localhost:5173`.
 
 ____
 
+## Deploying to Vercel
+
+Because the frontend and backend are two independent apps, they deploy as **two separate Vercel projects** from this same GitHub repo, distinguished by each project's **Root Directory** setting.
+
+### 1. Backend project (`server/`)
+
+- Import the repo into Vercel, set **Root Directory** to `server`.
+- Framework preset: Next.js (auto-detected).
+- Environment variables (Project Settings → Environment Variables):
+  - `SUPABASE_URL`
+  - `SUPABASE_SECRET_KEY`
+  - `AUTH_JWT_SECRET`
+  - `FRONTEND_ORIGIN` — the client project's deployed URL (set this after step 2), e.g. `https://fast-order-eosin.vercel.app`
+- Deploy. Note the resulting URL, e.g. `https://fast-order-api.vercel.app`.
+
+### 2. Frontend project (repo root)
+
+- Import the repo into Vercel again as a second project, this time leave **Root Directory** as `.` (repo root).
+- Framework preset: Vite (auto-detected). A root `vercel.json` provides the SPA fallback rewrite needed for `react-router-dom`'s `BrowserRouter`.
+- Environment variables:
+  - `VITE_API_BASE_URL` — the backend project's URL from step 1, with `/api` appended, e.g. `https://fast-order-api.vercel.app/api`
+- Deploy.
+
+### 3. Close the loop
+
+Go back to the backend project's `FRONTEND_ORIGIN` env var and set it to the frontend project's actual deployed URL (needed for the `Access-Control-Allow-Origin` CORS header in `server/next.config.js`), then redeploy the backend.
+
+Preview deployments get their own URLs per branch/PR — if you need CORS to work on preview builds too, set `FRONTEND_ORIGIN` per-environment (Production/Preview/Development) in Vercel's env var UI rather than a single shared value.
+
