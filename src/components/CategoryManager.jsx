@@ -105,7 +105,7 @@ export default function CategoryManager({ restaurantId }) {
       <div className="flex items-center justify-end mb-4">
         <button
           onClick={() => setCreating((c) => !c)}
-          className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           {creating ? 'Cancel' : '+ New Category'}
         </button>
@@ -118,33 +118,33 @@ export default function CategoryManager({ restaurantId }) {
             placeholder="Slug (e.g. pizza)"
             value={createForm.id}
             onChange={(e) => setCreateForm((f) => ({ ...f, id: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
           <input
             required
             placeholder="Name"
             value={createForm.name}
             onChange={(e) => setCreateForm((f) => ({ ...f, name: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
           <input
             required
             placeholder="Icon (e.g. 🍕)"
             value={createForm.icon}
             onChange={(e) => setCreateForm((f) => ({ ...f, icon: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
           <input
             type="number"
             placeholder="Sort order"
             value={createForm.sortOrder}
             onChange={(e) => setCreateForm((f) => ({ ...f, sortOrder: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
           <button
             type="submit"
             disabled={saving}
-            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
           >
             {saving ? 'Creating…' : 'Create'}
           </button>
@@ -186,24 +186,24 @@ export default function CategoryManager({ restaurantId }) {
                         <input
                           value={editDraft.name}
                           onChange={(e) => setEditDraft((f) => ({ ...f, name: e.target.value }))}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         />
                         <input
                           value={editDraft.icon}
                           onChange={(e) => setEditDraft((f) => ({ ...f, icon: e.target.value }))}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         />
                         <input
                           type="number"
                           value={editDraft.sortOrder}
                           onChange={(e) => setEditDraft((f) => ({ ...f, sortOrder: e.target.value }))}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         />
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleSaveEdit(category.id)}
                             disabled={saving}
-                            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
+                            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
                           >
                             Save
                           </button>
@@ -219,7 +219,7 @@ export default function CategoryManager({ restaurantId }) {
                       <div className="flex gap-2">
                         <button
                           onClick={() => startEdit(category)}
-                          className="text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50"
+                          className="text-yellow-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-yellow-200 hover:bg-yellow-50"
                         >
                           Edit
                         </button>

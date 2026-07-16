@@ -17,7 +17,7 @@ export default function CartPage() {
         <p className="text-gray-500 mb-6">Add some items from the menu to get started.</p>
         <Link
           to="/"
-          className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+          className="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-6 py-3 rounded-xl transition-colors"
         >
           Browse Menu
         </Link>
@@ -72,7 +72,7 @@ export default function CartPage() {
       {/* Checkout CTA */}
       <Link
         to="/checkout"
-        className="block w-full text-center bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl transition-colors text-base"
+        className="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-xl transition-colors text-base"
       >
         Proceed to Checkout · ${grandTotal.toFixed(2)}
       </Link>

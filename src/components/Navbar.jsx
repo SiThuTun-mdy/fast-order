@@ -22,7 +22,7 @@ export default function Navbar() {
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-2 font-bold text-xl text-orange-500"
+          className="flex items-center gap-2 font-bold text-xl text-yellow-500"
         >
           🍽️ <span>FastOrder</span>
         </Link>
@@ -30,14 +30,14 @@ export default function Navbar() {
         <div className="flex items-center gap-1">
           <Link
             to="/cashier"
-            className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            className="text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
           >
             Cashier
           </Link>
 
           <Link
             to="/kitchen"
-            className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            className="text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
           >
             Kitchen
           </Link>
@@ -45,7 +45,7 @@ export default function Navbar() {
           {isSysAdmin && (
             <Link
               to="/sysadmin"
-              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              className="text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
             >
               SysAdmin
             </Link>
@@ -54,7 +54,7 @@ export default function Navbar() {
           {isAdmin && (
             <Link
               to="/admin"
-              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              className="text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
             >
               Admin
             </Link>
@@ -63,14 +63,14 @@ export default function Navbar() {
           {user ? (
             <button
               onClick={handleLogout}
-              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              className="text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
             >
               Logout
             </button>
           ) : (
             <Link
               to="/login"
-              className="text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+              className="text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
             >
               Login
             </Link>
@@ -78,7 +78,7 @@ export default function Navbar() {
 
           <Link
             to="/cart"
-            className="relative flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-orange-500 transition-colors p-2 rounded-lg hover:bg-orange-50"
+            className="relative flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-yellow-500 transition-colors p-2 rounded-lg hover:bg-yellow-50"
             aria-label={`Cart (${count} items)`}
           >
             <svg
@@ -97,7 +97,7 @@ export default function Navbar() {
             </svg>
             <span className="hidden sm:inline">Cart</span>
             {count > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-orange-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1">
+              <span className="absolute -top-0.5 -right-0.5 bg-yellow-500 text-white text-xs font-bold rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1">
                 {count > 99 ? "99+" : count}
               </span>
             )}

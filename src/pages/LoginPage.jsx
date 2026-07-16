@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../api/auth';
-import { useAuthDispatch } from '../context/AuthContext';
-import heroImage from '../assets/fastorder-hero.jpg';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login } from "../api/auth";
+import { useAuthDispatch } from "../context/AuthContext";
+import heroImage from "../assets/fastorder-hero.jpg";
 
 export default function LoginPage() {
   const dispatch = useAuthDispatch();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -17,22 +17,26 @@ export default function LoginPage() {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-    dispatch({ type: 'LOGIN_START' });
+    dispatch({ type: "LOGIN_START" });
 
     try {
       const { token, user } = await login(username, password);
-      localStorage.setItem('auth_token', token);
-      localStorage.setItem('auth_user', JSON.stringify(user));
-      dispatch({ type: 'LOGIN_SUCCESS', token, user });
-      if (user?.roles?.includes('SysAdmin')) {
-        navigate('/sysadmin');
-      } else if (user?.roles?.includes('Admin')) {
-        navigate('/admin');
+      localStorage.setItem("auth_token", token);
+      localStorage.setItem("auth_user", JSON.stringify(user));
+      dispatch({ type: "LOGIN_SUCCESS", token, user });
+      if (user?.roles?.includes("SysAdmin")) {
+        navigate("/sysadmin");
+      } else if (user?.roles?.includes("Admin")) {
+        navigate("/admin");
+      } else if (user?.roles?.includes("Cashier")) {
+        navigate("/cashier");
+      } else if (user?.roles?.includes("Chef")) {
+        navigate("/kitchen");
       } else {
-        navigate('/');
+        navigate("/");
       }
     } catch (err) {
-      dispatch({ type: 'LOGIN_ERROR', error: err.message });
+      dispatch({ type: "LOGIN_ERROR", error: err.message });
       setError(err.message);
       setSubmitting(false);
     }
@@ -55,7 +59,8 @@ export default function LoginPage() {
               FastOrder
             </h1>
             <p className="mt-3 max-w-xs sm:max-w-sm text-gray-600 text-sm sm:text-base">
-              Fresh made to order — sign in to manage the counter, kitchen, or your restaurants.
+              Fresh made to order — sign in to manage the counter, kitchen, or
+              your restaurants.
             </p>
           </div>
         </div>
@@ -63,14 +68,17 @@ export default function LoginPage() {
 
       {/* Login card */}
       <div className="max-w-sm mx-auto px-4 pt-10 pb-16">
-        <div className="bg-orange-50/60 rounded-2xl border border-orange-100 shadow-xl shadow-orange-900/5 p-6 sm:p-8">
+        <div className="bg-yellow-50/60 rounded-2xl border border-yellow-100 shadow-xl shadow-yellow-900/5 p-6 sm:p-8">
           <h2 className="font-display text-3xl tracking-wide text-gray-900 mb-6 text-center">
             Sign In
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="username">
+              <label
+                className="block text-sm font-medium text-gray-700 mb-1"
+                htmlFor="username"
+              >
                 Username
               </label>
               <input
@@ -86,7 +94,10 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+              <label
+                className="block text-sm font-medium text-gray-700 mb-1"
+                htmlFor="password"
+              >
                 Password
               </label>
               <input
@@ -108,7 +119,7 @@ export default function LoginPage() {
               disabled={submitting}
               className="w-full bg-gradient-to-r from-brand-500 to-appetite-600 hover:brightness-105 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold rounded-xl px-4 py-2.5 text-sm shadow-md shadow-brand-500/30 transition-all"
             >
-              {submitting ? 'Signing in…' : 'Sign In'}
+              {submitting ? "Signing in…" : "Sign In"}
             </button>
           </form>
 

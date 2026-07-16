@@ -21,7 +21,11 @@
       "Bash(git add *)",
       "Bash(git status *)",
       "Bash(git commit *)",
-      "Bash(npx -y supabase migration new seed_rbac_sysadmin)"
+      "Bash(npx -y supabase migration new seed_rbac_sysadmin)",
+      "Skill(shadcn)",
+      "Bash(npm install *)",
+      "Bash(npx supabase *)",
+      "WebFetch(domain:ui.shadcn.com)"
     ]
   },
   "enabledMcpjsonServers": [

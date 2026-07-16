@@ -13,6 +13,12 @@
       "skillPath": "skills/react-vite-best-practices/SKILL.md",
       "computedHash": "82994934665a490b227fabdfec3d148b1fa291d77d82ccf978e761b9e1ff6e4c"
     },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "d81caa0f86aabab65b25e302d454f23a3328760386ed9078345584c0d5c8058e"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",

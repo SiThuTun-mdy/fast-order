@@ -2,7 +2,8 @@
 insert into order_status (id, label, sort_order) values
   ('confirmed', 'Pay at Counter', 1),
   ('kitchen',   'In Kitchen',     2),
-  ('ready',     'Ready for Pickup', 3);
+  ('ready',     'Ready for Pickup', 3),
+  ('canceled',  'Canceled',       4);
 
 insert into order_type (id, label) values
   ('dine-in', 'Dine In'),

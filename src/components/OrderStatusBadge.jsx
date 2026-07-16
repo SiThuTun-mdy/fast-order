@@ -7,12 +7,17 @@ const STATUS_CONFIG = {
   kitchen: {
     label: "In Kitchen",
     icon: "👨‍🍳",
-    classes: "bg-orange-100 text-orange-700",
+    classes: "bg-yellow-100 text-yellow-700",
   },
   ready: {
     label: "Ready for Pickup!",
     icon: "🎉",
     classes: "bg-green-100 text-green-700",
+  },
+  canceled: {
+    label: "Canceled",
+    icon: "🚫",
+    classes: "bg-red-100 text-red-700",
   },
 };
 

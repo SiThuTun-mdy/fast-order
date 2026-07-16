@@ -151,9 +151,9 @@ export default function MenuPage() {
           <div className="max-w-lg mx-auto">
             <Link
               to="/cart"
-              className="flex items-center justify-between bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-4 rounded-2xl shadow-lg transition-colors"
+              className="flex items-center justify-between bg-yellow-500 hover:bg-yellow-600 text-white font-semibold px-5 py-4 rounded-2xl shadow-lg transition-colors"
             >
-              <span className="bg-orange-400 rounded-lg px-2.5 py-0.5 text-sm">
+              <span className="bg-yellow-400 rounded-lg px-2.5 py-0.5 text-sm">
                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
               </span>
               <span>View Cart</span>

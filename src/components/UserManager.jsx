@@ -126,7 +126,7 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
             id="tenant-picker"
             value={selectedRestaurantId}
             onChange={(e) => setSelectedRestaurantId(e.target.value)}
-            className="w-full sm:w-64 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full sm:w-64 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           >
             <option value="">All tenants</option>
             {tenants.map((tenant) => (
@@ -142,7 +142,7 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
         <button
           onClick={() => setCreating((c) => !c)}
           disabled={!scopeId}
-          className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           {creating ? 'Cancel' : '+ New User'}
         </button>
@@ -158,7 +158,7 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
             placeholder="Username"
             value={createForm.username}
             onChange={(e) => setCreateForm((f) => ({ ...f, username: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
           <input
             required
@@ -166,13 +166,13 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
             placeholder="Password"
             value={createForm.password}
             onChange={(e) => setCreateForm((f) => ({ ...f, password: e.target.value }))}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
           />
           {renderRoleCheckboxes(createForm.roles, (roles) => setCreateForm((f) => ({ ...f, roles })))}
           <button
             type="submit"
             disabled={saving}
-            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
           >
             {saving ? 'Creating…' : 'Create'}
           </button>
@@ -211,7 +211,7 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
                     {user.roles.map((roleName) => (
                       <span
                         key={roleName}
-                        className="text-xs font-medium text-orange-700 bg-orange-50 px-2 py-0.5 rounded-full"
+                        className="text-xs font-medium text-yellow-700 bg-yellow-50 px-2 py-0.5 rounded-full"
                       >
                         {roleName}
                       </span>
@@ -227,21 +227,21 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
                         <input
                           value={editDraft.username}
                           onChange={(e) => setEditDraft((f) => ({ ...f, username: e.target.value }))}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         />
                         <input
                           type="password"
                           placeholder="New password (leave blank to keep unchanged)"
                           value={editDraft.password}
                           onChange={(e) => setEditDraft((f) => ({ ...f, password: e.target.value }))}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                         />
                         {renderRoleCheckboxes(editDraft.roles, (roles) => setEditDraft((f) => ({ ...f, roles })))}
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleSaveEdit(user.id)}
                             disabled={saving}
-                            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
+                            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
                           >
                             Save
                           </button>
@@ -257,7 +257,7 @@ export default function UserManager({ restaurantId, availableRoles = DEFAULT_ROL
                       <div className="flex gap-2">
                         <button
                           onClick={() => startEdit(user)}
-                          className="text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50"
+                          className="text-yellow-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-yellow-200 hover:bg-yellow-50"
                         >
                           Edit
                         </button>

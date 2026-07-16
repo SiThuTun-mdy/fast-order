@@ -9,7 +9,7 @@ export default function MenuItem({ item }) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition-shadow hover:shadow-md">
-      <div className="bg-gradient-to-br from-orange-50 to-amber-50 h-36 flex items-center justify-center text-5xl select-none">
+      <div className="bg-gradient-to-br from-yellow-50 to-amber-50 h-36 flex items-center justify-center text-5xl select-none">
         <span role="img" aria-label={item.name}>{item.emoji}</span>
       </div>
 
@@ -19,7 +19,7 @@ export default function MenuItem({ item }) {
             {item.name}
           </h3>
           {item.popular && (
-            <span className="flex-shrink-0 text-xs bg-orange-100 text-orange-600 font-medium px-2 py-0.5 rounded-full">
+            <span className="flex-shrink-0 text-xs bg-yellow-100 text-yellow-600 font-medium px-2 py-0.5 rounded-full">
               Popular
             </span>
           )}
@@ -33,7 +33,7 @@ export default function MenuItem({ item }) {
           <span className="font-bold text-gray-900">${item.price.toFixed(2)}</span>
           <button
             onClick={handleAdd}
-            className="bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+            className="bg-yellow-500 hover:bg-yellow-600 active:bg-yellow-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
           >
             + Add
           </button>

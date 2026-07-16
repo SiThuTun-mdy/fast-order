@@ -60,7 +60,7 @@ export default function CheckoutPage() {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center">
         <p className="text-gray-500 mb-4">Nothing in your cart.</p>
-        <Link to="/" className="text-orange-500 font-medium hover:underline">
+        <Link to="/" className="text-yellow-500 font-medium hover:underline">
           Back to Menu
         </Link>
       </div>
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
               value={form.customerName}
               onChange={handleChange}
               placeholder="Jane Smith"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
             />
           </div>
 
@@ -107,7 +107,7 @@ export default function CheckoutPage() {
               value={form.phone}
               onChange={handleChange}
               placeholder="555-0100"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function CheckoutPage() {
                   <div
                     className={`text-center py-2.5 border-2 rounded-xl text-sm font-medium transition-colors ${
                       form.orderType === value
-                        ? 'border-orange-500 bg-orange-50 text-orange-700'
+                        ? 'border-yellow-500 bg-yellow-50 text-yellow-700'
                         : 'border-gray-200 text-gray-600 hover:border-gray-300'
                     }`}
                   >
@@ -154,7 +154,7 @@ export default function CheckoutPage() {
                 value={form.tableNumber}
                 onChange={handleChange}
                 placeholder="e.g. 7"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               />
             </div>
           )}
@@ -171,7 +171,7 @@ export default function CheckoutPage() {
               onChange={handleChange}
               placeholder="Allergies, no onions, extra sauce..."
               rows={3}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent resize-none"
             />
           </div>
 
@@ -182,7 +182,7 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-colors text-base"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-xl transition-colors text-base"
           >
             {submitting ? 'Placing Order…' : `Place Order · $${grandTotal.toFixed(2)}`}
           </button>

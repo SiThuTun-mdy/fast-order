@@ -12,7 +12,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Link
           to={`/admin/${tenantId}/user`}
-          className="bg-white rounded-xl border border-gray-100 p-6 hover:border-orange-300 transition-colors"
+          className="bg-white rounded-xl border border-gray-100 p-6 hover:border-yellow-300 transition-colors"
         >
           <h2 className="text-lg font-semibold text-gray-900 mb-1">User Management</h2>
           <p className="text-sm text-gray-500">Manage your restaurant's staff accounts.</p>
@@ -20,7 +20,7 @@ export default function AdminPage() {
 
         <Link
           to={`/admin/${tenantId}/menu`}
-          className="bg-white rounded-xl border border-gray-100 p-6 hover:border-orange-300 transition-colors"
+          className="bg-white rounded-xl border border-gray-100 p-6 hover:border-yellow-300 transition-colors"
         >
           <h2 className="text-lg font-semibold text-gray-900 mb-1">Menu Management</h2>
           <p className="text-sm text-gray-500">Add, edit, and remove menu items.</p>
@@ -28,7 +28,7 @@ export default function AdminPage() {
 
         <Link
           to={`/admin/${tenantId}/category`}
-          className="bg-white rounded-xl border border-gray-100 p-6 hover:border-orange-300 transition-colors"
+          className="bg-white rounded-xl border border-gray-100 p-6 hover:border-yellow-300 transition-colors"
         >
           <h2 className="text-lg font-semibold text-gray-900 mb-1">Category Management</h2>
           <p className="text-sm text-gray-500">Organize your menu into categories.</p>

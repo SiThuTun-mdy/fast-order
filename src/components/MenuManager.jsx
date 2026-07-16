@@ -31,13 +31,13 @@ export default function MenuManager({ restaurantId }) {
         placeholder="Name"
         value={draft.name}
         onChange={(e) => setDraft((f) => ({ ...f, name: e.target.value }))}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
       />
       <select
         required
         value={draft.category}
         onChange={(e) => setDraft((f) => ({ ...f, category: e.target.value }))}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
       >
         <option value="" disabled>
           Select a category
@@ -56,19 +56,19 @@ export default function MenuManager({ restaurantId }) {
         placeholder="Price"
         value={draft.price}
         onChange={(e) => setDraft((f) => ({ ...f, price: e.target.value }))}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
       />
       <input
         placeholder="Description"
         value={draft.description}
         onChange={(e) => setDraft((f) => ({ ...f, description: e.target.value }))}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
       />
       <input
         placeholder="Emoji (e.g. 🍔)"
         value={draft.emoji}
         onChange={(e) => setDraft((f) => ({ ...f, emoji: e.target.value }))}
-        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent"
+        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
       />
       <label className="flex items-center gap-1.5 text-sm text-gray-700">
         <input
@@ -173,7 +173,7 @@ export default function MenuManager({ restaurantId }) {
       <div className="flex items-center justify-end mb-4">
         <button
           onClick={() => setCreating((c) => !c)}
-          className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="bg-yellow-500 hover:bg-yellow-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           {creating ? 'Cancel' : '+ New Item'}
         </button>
@@ -185,7 +185,7 @@ export default function MenuManager({ restaurantId }) {
           <button
             type="submit"
             disabled={saving}
-            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
+            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 disabled:cursor-not-allowed text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
           >
             {saving ? 'Creating…' : 'Create'}
           </button>
@@ -219,7 +219,7 @@ export default function MenuManager({ restaurantId }) {
                   </p>
                   <div className="flex items-center gap-2">
                     {item.popular && (
-                      <span className="text-xs font-medium text-orange-700 bg-orange-50 px-2 py-0.5 rounded-full">
+                      <span className="text-xs font-medium text-yellow-700 bg-yellow-50 px-2 py-0.5 rounded-full">
                         Popular
                       </span>
                     )}
@@ -237,7 +237,7 @@ export default function MenuManager({ restaurantId }) {
                           <button
                             onClick={() => handleSaveEdit(item.id)}
                             disabled={saving}
-                            className="bg-orange-500 hover:bg-orange-600 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
+                            className="bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60 text-white text-xs font-semibold px-3 py-1.5 rounded-lg"
                           >
                             Save
                           </button>
@@ -255,7 +255,7 @@ export default function MenuManager({ restaurantId }) {
                         <div className="flex gap-2">
                           <button
                             onClick={() => startEdit(item)}
-                            className="text-orange-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50"
+                            className="text-yellow-600 text-xs font-semibold px-3 py-1.5 rounded-lg border border-yellow-200 hover:bg-yellow-50"
                           >
                             Edit
                           </button>
