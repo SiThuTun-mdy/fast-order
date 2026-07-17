@@ -1,4 +1,5 @@
 import { useCartDispatch } from '../context/CartContext';
+import { trackRemoveFromCart } from '../lib/analytics';
 
 export default function CartItem({ item }) {
   const dispatch = useCartDispatch();
@@ -6,7 +7,10 @@ export default function CartItem({ item }) {
   const setQty = (qty) =>
     dispatch({ type: 'UPDATE_QUANTITY', id: item.id, quantity: qty });
 
-  const remove = () => dispatch({ type: 'REMOVE_ITEM', id: item.id });
+  const remove = () => {
+    dispatch({ type: 'REMOVE_ITEM', id: item.id });
+    trackRemoveFromCart(item);
+  };
 
   return (
     <div className="flex items-center gap-3 py-4 border-b border-gray-100 last:border-0">

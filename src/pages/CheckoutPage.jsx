@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart, useCartTotal, useCartDispatch } from '../context/CartContext';
 import { createOrder } from '../api/orders';
+import { trackOrderPlaced, trackOrderFailed } from '../lib/analytics';
 
 export default function CheckoutPage() {
   const cart = useCart();
@@ -48,9 +49,23 @@ export default function CheckoutPage() {
         total: parseFloat(grandTotal.toFixed(2)),
       });
 
+      trackOrderPlaced({
+        orderId: order.id,
+        orderType: form.orderType,
+        subtotal: total,
+        tax,
+        total: grandTotal,
+        cart,
+      });
+
       dispatch({ type: 'CLEAR_CART' });
       navigate(`/order/${order.id}`);
     } catch {
+      trackOrderFailed({
+        orderType: form.orderType,
+        total: grandTotal,
+        itemCount: cart.length,
+      });
       setError('Unable to place order. Please try again.');
       setSubmitting(false);
     }

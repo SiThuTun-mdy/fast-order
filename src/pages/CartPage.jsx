@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import { useCart, useCartTotal, useCartDispatch } from '../context/CartContext';
+import { trackCartCleared, trackCheckoutStarted } from '../lib/analytics';
 
 export default function CartPage() {
   const cart = useCart();
@@ -36,7 +37,10 @@ export default function CartPage() {
           <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>
         </div>
         <button
-          onClick={() => dispatch({ type: 'CLEAR_CART' })}
+          onClick={() => {
+            trackCartCleared(cart, total);
+            dispatch({ type: 'CLEAR_CART' });
+          }}
           className="text-sm text-gray-400 hover:text-red-500 transition-colors"
         >
           Clear all
@@ -72,6 +76,14 @@ export default function CartPage() {
       {/* Checkout CTA */}
       <Link
         to="/checkout"
+        onClick={() =>
+          trackCheckoutStarted({
+            itemCount: cart.length,
+            subtotal: total,
+            tax,
+            total: grandTotal,
+          })
+        }
         className="block w-full text-center bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-4 rounded-xl transition-colors text-base"
       >
         Proceed to Checkout · ${grandTotal.toFixed(2)}

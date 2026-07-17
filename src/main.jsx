@@ -4,7 +4,10 @@ import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import App from './App';
+import { initAnalytics } from './lib/analytics';
 import './index.css';
+
+initAnalytics();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

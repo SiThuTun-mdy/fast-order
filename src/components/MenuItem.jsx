@@ -1,10 +1,12 @@
 import { useCartDispatch } from '../context/CartContext';
+import { trackAddToCart } from '../lib/analytics';
 
 export default function MenuItem({ item }) {
   const dispatch = useCartDispatch();
 
   const handleAdd = () => {
     dispatch({ type: 'ADD_ITEM', item });
+    trackAddToCart(item);
   };
 
   return (
