@@ -16,6 +16,15 @@
     "supabase": {
       "type": "http",
       "url": "https://mcp.supabase.com/mcp?project_ref=dciowbksowpomyjntywz&features=docs%2Cdatabase%2Cdevelopment%2Cdebugging%2Caccount%2Cfunctions%2Cbranching%2Cstorage"
+    },
+    "chrome-devtools": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
+      "env": {}
     }
   }
 }
