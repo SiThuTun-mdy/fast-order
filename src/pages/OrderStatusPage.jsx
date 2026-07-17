@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { Ban } from "lucide-react";
 import { useOrder } from "../hooks/useOrders";
 import OrderStatusBadge from "../components/OrderStatusBadge";
 
@@ -24,7 +25,7 @@ const STEPS = [
   {
     key: "canceled",
     label: "Canceled",
-    icon: ":cancelled:",
+    icon: <Ban className="w-5 h-5 text-red-500" />,
     desc: "Canceled orders cannot be fulfilled",
   },
 ];
